@@ -52,13 +52,32 @@ router.get("/:cid", async (req, res) => {
 
 // /api/carts/
 router.post("/", async (req, res) => {
-  const { body, io} = req;
+  const { body, io } = req;
 
-  const carts = await CartModel.create(body);
+  try {
+    const cart = new CartModel({
+      products: [
+        {
+          product: body.productId,
+          qty: 1,
+          title: body.title,
+          description: body.description,
+          price: body.price,
+          thumbnail: body.thumbnail,
+          code: body.code,
+          stock: body.stock,
+        },
+      ],
+    });
 
-  io.emit("newProduct", carts)
+    const savedCart = await cart.save();
+    io.emit("newProduct", savedCart);
 
-  res.status(201).send(carts);
+    res.status(201).send(savedCart);
+  } catch (error) {
+    console.error("Error al crear el carrito:", error);
+    res.status(500).send("Ocurrió un error al crear el carrito");
+  }
 });
 
 // /api/carts/:id
@@ -177,5 +196,6 @@ router.delete("/:cid", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 
 module.exports = router;

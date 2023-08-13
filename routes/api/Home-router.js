@@ -30,33 +30,35 @@ router.get("/", async (req, res) => {
     pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}` : "";
   
     res.render("home", {
-      title: "Productos",
-      products: filteredProducts,
-      pageInfo,
-      style: "home"
-    });
-    
+    title: "Productos",
+    products: filteredProducts,
+    pageInfo,
+    style: "home"
   });
+    
+});
   
 
 router.get("/carts", async(req, res)=>{
 
-    const carts = await cartsManager.getAll()
+  const carts = await cartsManager.getAll()
     res.render("carts", {
-        title: "Carrito",
-        carts,
-        style: "carrito"
-    })
+    title: "Carrito",
+    carts,
+    style: "carrito"
+  })
 })
 
 router.get("/realTimesProducts", async(req, res)=>{
 
-    const products = await productManager.getAll()
+  const products = await productManager.getAll()
     res.render("realTimesProducts", {
-        title: "RealTimesProducts",
-        products,
-        style: "realTime"
-    })
+    title: "RealTimesProducts",
+    products,
+    style: "realTime"
+  }
+  
+  )
     
 })
 
